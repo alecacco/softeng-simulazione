@@ -1,12 +1,12 @@
 const express = require('express');
+const routerModule = require('./router.js')
 
 const app = express();
 
-// News router
-var newsRouter = express.Router();
-newsRouter.get('/:deptName',newsRoutes.getNewsByDepartment);
+var router = express.Router();
+router.get('/:thing',routerModule.getThingById);
 // Register our router on /news
-app.use('/news', newsRouter);
+app.use('/thing', router);
 
 // handle invalid requests and internal error
 app.use((req, res, next) => {
