@@ -1,12 +1,35 @@
 const express = require('express');
 const routerModule = require('./router.js')
+const consoleRoutes = require('./route/consoleRoutes.js');
+const accessoriesRoutes = require('./route/accessoriesRoutes.js');
 
 const app = express();
 
-var router = express.Router();
-router.get('/:thing',routerModule.getThingById);
-// Register our router on /news
-app.use('/thing', router);
+// middleware route to support CORS and preflighted requests
+app.use(function (req, res, next) {
+    //Enabling CORS
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    if (req.method == 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'PUT, DELETE');
+        return res.status(200).json({});
+    }
+    next();
+});
+
+
+// Routes
+var consoleRouter = express.Router();
+consoleRouter.get('/',consoleRoutes.getConsoleList);
+//consoleRouter.get('/:consoleName',consoleRoutes.getSingleConsoleList);
+//consoleRouter.get('/:consoleName/getAccessories',accessoriesRoutes.getAccessoriesByConsole);
+consoleRouter.post('/addConsole',consoleRoutes.addConsole);
+app.use('/C',consoleRouter);
+
+var accessoriesRouter = express.Router();
+//accessoriesRouter.get('/',accessoriesRoutes.getAccessoriesList);
+//accessoriesRouter.use('/accessories',accessoriesRouter);
+
 
 // handle invalid requests and internal error
 app.use((req, res, next) => {
@@ -26,3 +49,4 @@ app.set('port', process.env.PORT || 3000);
 // Start the server
 app.listen(app.get('port'));
 console.log('Server started! Running on port: ' + app.get('port'));
+

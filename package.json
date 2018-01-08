@@ -4,7 +4,8 @@
   "description": "Simulation of the exam",
   "main": "start.js",
   "scripts": {
-   "start": "node start.js"
+    "start": "node start.js",
+    "test":"jest"
   },
   "repository": {
     "type": "git",
@@ -14,5 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "jest": "^22.0.4"
   }
 }
