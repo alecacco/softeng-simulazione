@@ -1,20 +1,42 @@
+var DBMM = require("../database_simulation/db.js" );
 
-function getConsoleList(){
+function getConsoleList(res){
 	console.log("show all consoles")
+	res.json(DBMM.getDatabase().console);
 }
 
-function addConsole(req){
-	console.log("added: ",req.body.name);
+function addConsole(req,res){
+	consoleName = req.body.name;
+	consoleNick = req.body.nick;
+	if (consoleName == undefined) 
+		res.json(["Console name required!"]);
+	else {
+		DBMM.addToDatabase('console',{name: consoleName,nick: consoleNick});
+		res.json(["Console successfully added to database."]);		
+	}
 }
 
-exports.getConsoleList = function (req, res, next){
-	console.log("added: ",req);
-	getConsoleList();
-	next();
+function editNickname(req,res){
+	consoleName = req.body.name;
+	consoleNick = req.body.nick;
+	if (consoleName == undefined) 
+		res.json(["Console name and nickname are both required!"]);
+	else {
+		if (DBMM.editConsole(consoleName,consoleNick))
+			res.json(["Console successfully edited."]);		
+		else
+			res.json(["ERROR: Console name not found!"]);		
+	}
 }
 
-exports.addConsole = function (req, res, next){
-	console.log("added: ",req.body);
-	next();
-	//addConsole(req);
+exports.editConsole = function(req,res){
+	editNickname(req,res);
+}
+
+exports.getConsoleList = function (req, res){
+	getConsoleList(res);
+}
+
+exports.addConsole = function (req, res){
+	addConsole(req,res);
 }

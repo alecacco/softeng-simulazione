@@ -1,9 +1,13 @@
+const bodyParser = require('body-parser');
 const express = require('express');
 const routerModule = require('./router.js')
 const consoleRoutes = require('./route/consoleRoutes.js');
 const accessoriesRoutes = require('./route/accessoriesRoutes.js');
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // middleware route to support CORS and preflighted requests
 app.use(function (req, res, next) {
@@ -21,9 +25,8 @@ app.use(function (req, res, next) {
 // Routes
 var consoleRouter = express.Router();
 consoleRouter.get('/',consoleRoutes.getConsoleList);
-//consoleRouter.get('/:consoleName',consoleRoutes.getSingleConsoleList);
-//consoleRouter.get('/:consoleName/getAccessories',accessoriesRoutes.getAccessoriesByConsole);
 consoleRouter.post('/addConsole',consoleRoutes.addConsole);
+consoleRouter.put('/editConsole',consoleRoutes.editConsole);
 app.use('/C',consoleRouter);
 
 var accessoriesRouter = express.Router();
